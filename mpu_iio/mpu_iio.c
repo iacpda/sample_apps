@@ -14,6 +14,9 @@
 
 #include "iio_mpu.h"
 
+/* Tests */
+bool test_accel = false;
+
 /*
  * Main function
  */
@@ -26,6 +29,9 @@ int main(int argc, char **argv)
 		switch (c) {
 		case 'd':
 			device = atoi(optarg);
+			break;
+		case 'a':
+			test_accel = true;
 			break;
 		case '?':
 		default:
@@ -50,6 +56,23 @@ int main(int argc, char **argv)
 		return ret;
 	}
 	printf("INFO: Power enabled\n", dev_name);
+
+	/* Accel */
+	if (test_accel) {
+		ret = mpu_set_dev_accel_enable(devfs, "1");
+		if (ret) {
+			printf("ERROR: Accel enable failed\n");
+			return ret;
+		}
+		printf("INFO: Accel enabled\n", dev_name);
+	} else {
+		ret = mpu_set_dev_accel_enable(devfs, "0");
+		if (ret) {
+			printf("ERROR: Accel disable failed\n");
+			return ret;
+		}
+		printf("INFO: Accel disabled\n", dev_name);
+	}
 
 	/* Buffer enable */
 	ret = mpu_set_dev_buffer_enable(devfs, "1");

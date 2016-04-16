@@ -34,6 +34,16 @@ int mpu_set_dev_buffer_enable(char *devdir, char *enable)
 	return write_sysfs_string("buffer/enable", devdir, enable);
 }
 
+int mpu_get_dev_accel_enable(char *devdir, char *enable)
+{
+	return read_sysfs_string("accel_enable", devdir, enable);
+}
+
+int mpu_set_dev_accel_enable(char *devdir, char *enable)
+{
+	return write_sysfs_string("accel_enable", devdir, enable);
+}
+
 int mpu_get_dev_master_enable(char *devdir, char *enable)
 {
 	return read_sysfs_string("master_enable", devdir, enable);
