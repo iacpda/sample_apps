@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <fcntl.h>
 #include <errno.h>
 
 #include "iio_mpu.h"
@@ -22,8 +23,9 @@ bool test_accel = false;
  */
 int main(int argc, char **argv)
 {
-	char c, devfs[35], dev_name[10];
+	char c, devfs[35], devnd[20], dev_name[10];
 	int device = 0, ret = 0;
+	int fd;
 
 	while ((c = getopt(argc, argv, "d:a")) != -1) {
 		switch (c) {
@@ -39,8 +41,10 @@ int main(int argc, char **argv)
 		}
 	}
 
-	sprintf(devfs, DEVFS, device);
-	printf("INFO: devfs=%s\n", devfs);
+	sprintf(devnd, DEVNODE, device);
+	sprintf(devfs, DEVSYSFS, device);
+	printf("INFO: devnode=%s\n", devnd);
+	printf("INFO: devsysfs=%s\n", devfs);
 
 	ret = mpu_get_dev_name(devfs, dev_name);
 	if (ret) {
@@ -90,9 +94,19 @@ int main(int argc, char **argv)
 	}
 	printf("INFO: Master enabled\n");
 
-	printf("INFO: ###################################\n");
-	printf("INFO: # Hello, is all can do right now! #\n");
-	printf("INFO: ###################################\n");
+	/* Open device */
+	fd = open(devnd, O_RDONLY | O_NONBLOCK);
+	if (fd < 0) {
+		printf("ERROR: Failed to open %s\n", devnd);
+		ret = -errno;
+		return ret;
+	}
+
+	printf("INFO: #####################################\n");
+	printf("INFO: # Hello, it's all can do right now! #\n");
+	printf("INFO: #####################################\n");
+
+	close(fd);
 
 	/* Master disable */
 	ret = mpu_set_dev_master_enable(devfs, "0");

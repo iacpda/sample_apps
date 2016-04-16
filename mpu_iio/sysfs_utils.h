@@ -11,8 +11,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define IIODEV "iio:device%d"
 #define IIODEVS "/sys/bus/iio/devices/"
-#define DEVFS IIODEVS "iio:device%d"
+#define DEVNODE "/dev/" IIODEV
+#define DEVSYSFS IIODEVS IIODEV
 
 int read_sysfs_string(char *filename, char *basedir, char *value)
 {
