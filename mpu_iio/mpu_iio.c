@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 		printf("ERROR: Power enable failed\n");
 		return ret;
 	}
-	printf("INFO: Power enabled\n", dev_name);
+	printf("INFO: Power enabled\n");
 
 	/* Accel */
 	if (test_accel) {
@@ -64,14 +64,14 @@ int main(int argc, char **argv)
 			printf("ERROR: Accel enable failed\n");
 			return ret;
 		}
-		printf("INFO: Accel enabled\n", dev_name);
+		printf("INFO: Accel enabled\n");
 	} else {
 		ret = mpu_set_dev_accel_enable(devfs, "0");
 		if (ret) {
 			printf("ERROR: Accel disable failed\n");
 			return ret;
 		}
-		printf("INFO: Accel disabled\n", dev_name);
+		printf("INFO: Accel disabled\n");
 	}
 
 	/* Buffer enable */
@@ -80,7 +80,7 @@ int main(int argc, char **argv)
 		printf("ERROR: Buffer enable failed\n");
 		return ret;
 	}
-	printf("INFO: Buffer enabled\n", dev_name);
+	printf("INFO: Buffer enabled\n");
 
 	/* Master enable */
 	ret = mpu_set_dev_master_enable(devfs, "1");
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 		printf("ERROR: Master enable failed\n");
 		return ret;
 	}
-	printf("INFO: Master enabled\n", dev_name);
+	printf("INFO: Master enabled\n");
 
 	printf("INFO: ###################################\n");
 	printf("INFO: # Hello, is all can do right now! #\n");
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 		printf("ERROR: Master disable failed\n");
 		return ret;
 	}
-	printf("INFO: Master disabled\n", dev_name);
+	printf("INFO: Master disabled\n");
 
 	/* Buffer disable */
 	ret = mpu_set_dev_buffer_enable(devfs, "0");
@@ -108,7 +108,7 @@ int main(int argc, char **argv)
 		printf("ERROR: Buffer disable failed\n");
 		return ret;
 	}
-	printf("INFO: Buffer disabled\n", dev_name);
+	printf("INFO: Buffer disabled\n");
 
 	/* Power off device */
 	ret = mpu_set_dev_power(devfs, "0");
@@ -116,7 +116,7 @@ int main(int argc, char **argv)
 		printf("ERROR: Power disable failed\n");
 		return ret;
 	}
-	printf("INFO: Power disabled\n", dev_name);
+	printf("INFO: Power disabled\n");
 
 	return ret;
 }
