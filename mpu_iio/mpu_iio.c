@@ -43,5 +43,57 @@ int main(int argc, char **argv)
 	}
 	printf("INFO: device name=%s\n", dev_name);
 
+	/* Power device */
+	ret = mpu_set_dev_power(devfs, "1");
+	if (ret) {
+		printf("ERROR: Power enable failed\n");
+		return ret;
+	}
+	printf("INFO: Power enabled\n", dev_name);
+
+	/* Buffer enable */
+	ret = mpu_set_dev_buffer_enable(devfs, "1");
+	if (ret) {
+		printf("ERROR: Buffer enable failed\n");
+		return ret;
+	}
+	printf("INFO: Buffer enabled\n", dev_name);
+
+	/* Master enable */
+	ret = mpu_set_dev_master_enable(devfs, "1");
+	if (ret) {
+		printf("ERROR: Master enable failed\n");
+		return ret;
+	}
+	printf("INFO: Master enabled\n", dev_name);
+
+	printf("INFO: ###################################\n");
+	printf("INFO: # Hello, is all can do right now! #\n");
+	printf("INFO: ###################################\n");
+
+	/* Master disable */
+	ret = mpu_set_dev_master_enable(devfs, "0");
+	if (ret) {
+		printf("ERROR: Master disable failed\n");
+		return ret;
+	}
+	printf("INFO: Master disabled\n", dev_name);
+
+	/* Buffer disable */
+	ret = mpu_set_dev_buffer_enable(devfs, "0");
+	if (ret) {
+		printf("ERROR: Buffer disable failed\n");
+		return ret;
+	}
+	printf("INFO: Buffer disabled\n", dev_name);
+
+	/* Power off device */
+	ret = mpu_set_dev_power(devfs, "0");
+	if (ret) {
+		printf("ERROR: Power disable failed\n");
+		return ret;
+	}
+	printf("INFO: Power disabled\n", dev_name);
+
 	return ret;
 }

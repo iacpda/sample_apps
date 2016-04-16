@@ -9,7 +9,37 @@
 
 #include "sysfs_utils.h"
 
-int mpu_get_dev_name(char *basedir, char *devname)
+int mpu_get_dev_name(char *devdir, char *devname)
 {
-	return read_sysfs_string("name", basedir, devname);
+	return read_sysfs_string("name", devdir, devname);
+}
+
+int mpu_get_dev_power(char *devdir, char *enable)
+{
+	return read_sysfs_string("power_state", devdir, enable);
+}
+
+int mpu_set_dev_power(char *devdir, char *enable)
+{
+	return write_sysfs_string("power_state", devdir, enable);
+}
+
+int mpu_get_dev_buffer_enable(char *devdir, char *enable)
+{
+	return read_sysfs_string("buffer/enable", devdir, enable);
+}
+
+int mpu_set_dev_buffer_enable(char *devdir, char *enable)
+{
+	return write_sysfs_string("buffer/enable", devdir, enable);
+}
+
+int mpu_get_dev_master_enable(char *devdir, char *enable)
+{
+	return read_sysfs_string("master_enable", devdir, enable);
+}
+
+int mpu_set_dev_master_enable(char *devdir, char *enable)
+{
+	return write_sysfs_string("master_enable", devdir, enable);
 }
