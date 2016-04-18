@@ -12,8 +12,11 @@
 #include <stdbool.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <poll.h>
 
 #include "iio_mpu.h"
+
+#define BUFFSIZE 128
 
 /* Tests */
 bool test_accel = false;
@@ -24,8 +27,9 @@ bool test_accel = false;
 int main(int argc, char **argv)
 {
 	char c, devfs[35], devnd[20], dev_name[10];
-	int device = 0, ret = 0;
-	int fd;
+	unsigned char *data;
+	int device = 0, ret = 0, i, j;
+	int read_size, fd;
 
 	while ((c = getopt(argc, argv, "d:a")) != -1) {
 		switch (c) {
@@ -102,11 +106,35 @@ int main(int argc, char **argv)
 		return ret;
 	}
 
-	printf("INFO: #####################################\n");
-	printf("INFO: # Hello, it's all can do right now! #\n");
-	printf("INFO: #####################################\n");
+	data = malloc(BUFFSIZE);
+	if (!data) {
+		ret = -ENOMEM;
+		return ret;
+	}
 
+	for (i = 0; i < 10; i++) {
+		struct pollfd pfd = {
+			.fd = fd,
+			.events = POLLIN,
+		};
+		poll(&pfd, 1, -1);
+		read_size = read(fd, data, BUFFSIZE);
+		if (read_size == -EAGAIN) {
+			printf("nothing available\n");
+			continue;
+		}
+		printf("READ(%02d): 0x", read_size);
+		for (j = 0; j <= read_size ; j++) {
+			printf("%02x", data[j]);
+		}
+		printf("\n");
+	}
+	free(data);
 	close(fd);
+
+	printf("INFO: #####################################\n");
+	printf("INFO: # Read, it's all can do right now! #\n");
+	printf("INFO: #####################################\n");
 
 	/* Master disable */
 	ret = mpu_set_dev_master_enable(devfs, "0");
